@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>VibeCraft Campus Hub</title>
+<meta name="description" content="Attendance Predictor and Free Room Locator for college students, in one Minecraft-style hub.">
+<meta name="theme-color" content="#0e0d14" id="tc">
+<link rel="icon" type="image/svg+xml" href="favicon.svg"><link rel="icon" type="image/x-icon" href="favicon.ico" sizes="any"><link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+<style>
+:root{--bar:calc(64px + env(safe-area-inset-top,0px));--px:'Press Start 2P','Courier New',monospace;--vt:'VT323','Courier New',monospace;color-scheme:dark}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;background:#0e0d14;color:#ece8f5;font:22px/1.2 var(--vt);overflow-x:hidden}
+body.ow{background:#593d29}body.end{background:#0a0612}
+h1,h2,h3{font-family:var(--px);font-weight:400;margin:0}
+a{color:inherit}
+:focus-visible{outline:4px solid #f5c400;outline-offset:2px}
+.bar{position:fixed;inset:0 0 auto 0;height:var(--bar);padding:env(safe-area-inset-top,0px) 14px 0;display:flex;align-items:center;gap:14px;background:#1c1b22;border-bottom:4px solid #000;box-shadow:inset 0 -4px 0 #34313f;z-index:10}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;font:11px/1.5 var(--px);color:#fff;white-space:nowrap}
+.brand img{width:32px;height:32px;image-rendering:pixelated}
+.hb{display:flex;gap:12px;margin-left:auto}
+.slot{display:flex;align-items:center;gap:8px;height:42px;padding:0 12px;background:#8b8b8b;border:4px solid;border-color:#373737 #fff #fff #373737;color:#1e1e1e;text-decoration:none;font:9px/1 var(--px)}
+.slot svg,.slot img{width:22px;height:22px;image-rendering:pixelated;flex:none}
+.slot:hover{background:#a0a0a0}
+.slot[aria-current=page]{outline:4px solid #fff;outline-offset:3px;background:#c6c6c6}
+.view{position:fixed;inset:var(--bar) 0 0 0;overflow:auto}
+iframe.view{width:100%;height:calc(100% - var(--bar));border:0;background:transparent;animation:warp .4s ease-out}
+@keyframes warp{from{opacity:0;filter:blur(6px)}to{opacity:1;filter:none}}
+[hidden]{display:none!important}
+#home{background:
+ linear-gradient(#0e0d14e6,#0e0d14e6),
+ conic-gradient(#1a1826 25%,transparent 0 50%,#1a1826 0 75%,transparent 0) 0 0/48px 48px,#0e0d14}
+.wrap{max-width:1000px;margin:0 auto;padding:34px 16px 50px}
+.hero h1{font-size:clamp(16px,4.4vw,32px);line-height:1.5;color:#e6e2a8;text-shadow:4px 4px 0 #000}
+.hero p{max-width:640px;font-size:26px;color:#c9c2df;margin:14px 0 8px}
+.meta{color:#f5c400;font-size:24px;margin-bottom:26px}
+.cards{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+.card{padding:20px;border:4px solid #000;display:flex;flex-direction:column;gap:12px}
+.card h2{font-size:15px;line-height:1.5}
+.card svg,.card img{width:56px;height:56px;image-rendering:pixelated}
+.card ul{margin:0;padding-left:22px;font-size:24px;flex:1}
+.card li{margin-bottom:4px}
+.card.ow{background:#c6c6c6;color:#1e1e1e;box-shadow:inset 4px 4px 0 #fff,inset -4px -4px 0 #555,0 -14px 0 -4px #5d9b3a,6px 6px 0 rgba(0,0,0,.5)}
+.card.end{background:#140d24;color:#ebe5fa;box-shadow:inset 4px 4px 0 #3a2766,inset -4px -4px 0 #0a0612,6px 6px 0 rgba(0,0,0,.5)}
+.go{display:inline-block;text-align:center;text-decoration:none;font:11px/1.6 var(--px);padding:14px 16px;border:4px solid #000;color:#fff;cursor:pointer}
+.ow .go{background:#5d9b3a;box-shadow:inset 4px 4px 0 #7fd14f,inset -4px -4px 0 #3f6b26}
+.end .go{background:#8a4fd6;box-shadow:inset 4px 4px 0 #b784f5,inset -4px -4px 0 #4c2a86}
+.go:hover{filter:brightness(1.12)}
+.foot{margin-top:26px;color:#8f88a8;font-size:20px}
+#load{position:fixed;inset:var(--bar) 0 0;display:grid;place-items:center;font:11px var(--px);color:#e6e2a8;z-index:0}
+@media(max-width:700px){.cards{grid-template-columns:1fr}.brand span{display:none}.slot{padding:0 9px}}
+@media(max-width:430px){.slot span{display:none}}
+@media(prefers-reduced-motion:reduce){iframe.view{animation:none}}
+</style></head><body>
+<header class="bar">
+<a class="brand" href="#/" title="Campus Hub"><img src="favicon.svg" alt=""><span>VIBECRAFT CAMPUS</span></a>
+<nav class="hb" aria-label="Tools">
+<a class="slot" href="#/" data-k="home" title="Home (press 1)"><i class="ic" data-i="grass"></i><span>Home</span></a>
+<a class="slot" href="#/attendance" data-k="attendance" title="Attendance Predictor (press 2)"><i class="ic" data-i="heart"></i><span>Attendance</span></a>
+<a class="slot" href="#/rooms" data-k="rooms" title="Room Locator (press 3)"><img src="favicon.svg" alt=""><span>Rooms</span></a>
+</nav></header>
+
+<main id="home" class="view"><div class="wrap">
+<div class="hero"><h1>Your campus, two dimensions.</h1>
+<p>Work out how many classes you can afford to skip in the Overworld, then find a quiet empty room in the End.</p>
+<div class="meta" id="meta"></div></div>
+<div class="cards">
+<section class="card ow"><i class="ic big" data-i="heart"></i><h2>Attendance Predictor</h2>
+<ul><li>How many classes you must attend to stay above 75%</li><li>Warns you before detention becomes irreversible</li><li>Charts, an OD and leave simulator, and an Attendance Advisor chat</li></ul>
+<a class="go" href="#/attendance">Enter the Overworld</a></section>
+<section class="card end"><img src="favicon.svg" alt=""><h2>Room Locator</h2>
+<ul><li>Empty rooms right now, floor by floor</li><li>3D building map with a live countdown to the next class</li><li>Ask in plain English, then call your squad on WhatsApp</li></ul>
+<a class="go" href="#/rooms">Enter the End</a></section>
+</div>
+<div class="foot">Tip: press 1, 2 or 3 to switch tools. Both tools use the same timetables from SRM IST Tiruchirappalli, Faculty of Engineering and Technology.</div>
+</div></main>
+<div id="load" hidden>Loading dimension...</div>
+
+<script>
+const $=s=>document.querySelector(s);
+const ART={
+heart:['.hX.XX.','XXXXXXX','XXXXXXX','.XXXXX.','..XXX..','...X...'],
+grass:['gGgggGgg','gggGgggg','dddddddd','dDdddDdd','dddddddd','ddDdddDd','dddddddd','dDdddddd']};
+const PAL={X:'#d92b3f',h:'#ff8a96',g:'#5d9b3a',G:'#7fe01f',d:'#8b5a34',D:'#593d29'};
+function svg(k){const r=ART[k],w=r[0].length;let o='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 '+w+' '+r.length+'" shape-rendering="crispEdges">';
+r.forEach((row,y)=>[...row].forEach((c,x)=>{if(c!=='.')o+='<rect x="'+x+'" y="'+y+'" width="1" height="1" fill="'+(k==='heart'&&x==1&&y==0?PAL.h:PAL[c])+'"/>'}));return o+'</svg>'}
+document.querySelectorAll('.ic').forEach(e=>{e.outerHTML=svg(e.dataset.i).replace('<svg','<svg class="'+(e.classList.contains('big')?'big':'')+'"')});
+const V={home:{t:'VibeCraft Campus Hub',c:'#0e0d14',cls:''},attendance:{t:'Attendance Predictor | VibeCraft Campus Hub',c:'#5d9b3a',cls:'ow',src:'apps/attendance.html'},rooms:{t:'Room Locator | VibeCraft Campus Hub',c:'#0a0612',cls:'end',src:'apps/rooms.html'}};
+function go(){const m=location.hash.match(/^#\/(\w+)/),k=m&&V[m[1]]?m[1]:'home',v=V[k];
+$('#home').hidden=k!=='home';
+for(const n in V)if(V[n].src){let f=document.getElementById('f-'+n);
+ if(n===k&&!f){f=document.createElement('iframe');f.id='f-'+n;f.className='view';f.title=V[n].t;f.src=V[n].src;f.allow='clipboard-write; fullscreen';document.body.appendChild(f)}
+ if(f)f.hidden=n!==k}
+$('#load').hidden=k==='home';
+document.body.className=v.cls;document.title=v.t;$('#tc').content=v.c;
+document.querySelectorAll('.slot').forEach(a=>a.dataset.k===k?a.setAttribute('aria-current','page'):a.removeAttribute('aria-current'))}
+addEventListener('hashchange',go);
+addEventListener('keydown',e=>{if(e.target.matches('input,textarea,select')||e.ctrlKey||e.metaKey||e.altKey)return;const h={1:'#/',2:'#/attendance',3:'#/rooms'}[e.key];if(h)location.hash=h});
+(function(){const end=new Date(2026,10,29),n=new Date(),d=Math.ceil((end-new Date(n.getFullYear(),n.getMonth(),n.getDate()))/864e5);
+$('#meta').textContent=n.toLocaleDateString('en-IN',{weekday:'long',day:'numeric',month:'long'})+' · '+(d>0?d+' days left in the semester':'Semester complete')+' · Detention line 75%'})();
+go();
+</script></body></html>
